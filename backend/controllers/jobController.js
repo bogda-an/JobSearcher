@@ -1,79 +1,68 @@
-const asyncHandler = require('express-async-handler');
+const Joi = require('joi');
 const Job = require('../models/job');
 
-// Get all jobs
-const getJobs = asyncHandler(async (req, res) => {
-    const pageSize = 10; // Number of jobs per page
-    const page = Number(req.query.pageNumber) || 1;
-
-    const count = await Job.countDocuments({});
-    const jobs = await Job.find({})
-        .limit(pageSize)
-        .skip(pageSize * (page - 1));
-
-    res.json({ jobs, page, pages: Math.ceil(count / pageSize) });
+const jobSchema = Joi.object({
+  title: Joi.string().min(3).required(),
+  company: Joi.string().min(3).required(),
+  location: Joi.string().min(3).required(),
+  date_posted: Joi.date().required(),
+  employment_type: Joi.string().min(3).required(),
+  job_description: Joi.string().min(10).required(),
+  job_requirements: Joi.string().min(10).required(),
+  salary: Joi.number().required(),
+  industry: Joi.string().min(3).required(),
+  experience_level: Joi.string().min(3).required(),
+  job_link: Joi.string().uri().required(),
 });
 
-// Create new job
-const createJob = asyncHandler(async (req, res) => {
-    const { title, company, location, jobType, description, requirements, salary } = req.body;
+const getJobs = async (req, res) => {
+  try {
+    const jobs = await Job.find();
+    res.json(jobs);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
-    const job = new Job({
-        title,
-        company,
-        location,
-        jobType,
-        description,
-        requirements,
-        salary,
-    });
+const createJob = async (req, res) => {
+  const { error } = jobSchema.validate(req.body);
+  if (error) return res.status(400).json({ message: error.details[0].message });
 
-    const createdJob = await job.save();
-    res.status(201).json(createdJob);
-});
+  try {
+    const job = new Job(req.body);
+    await job.save();
+    res.status(201).json(job);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
-// Update job
-const updateJob = asyncHandler(async (req, res) => {
-    const { id } = req.params;
-    const { title, company, location, jobType, description, requirements, salary } = req.body;
+const updateJob = async (req, res) => {
+  const { error } = jobSchema.validate(req.body);
+  if (error) return res.status(400).json({ message: error.details[0].message });
 
-    const job = await Job.findById(id);
+  try {
+    const job = await Job.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!job) return res.status(404).json({ message: 'Job not found' });
+    res.json(job);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
-    if (job) {
-        job.title = title;
-        job.company = company;
-        job.location = location;
-        job.jobType = jobType;
-        job.description = description;
-        job.requirements = requirements;
-        job.salary = salary;
-
-        const updatedJob = await job.save();
-        res.json(updatedJob);
-    } else {
-        res.status(404);
-        throw new Error('Job not found');
-    }
-});
-
-// Delete job
-const deleteJob = asyncHandler(async (req, res) => {
-    const { id } = req.params;
-
-    const job = await Job.findById(id);
-
-    if (job) {
-        await job.remove();
-        res.json({ message: 'Job removed' });
-    } else {
-        res.status(404);
-        throw new Error('Job not found');
-    }
-});
+const deleteJob = async (req, res) => {
+  try {
+    const job = await Job.findByIdAndDelete(req.params.id);
+    if (!job) return res.status(404).json({ message: 'Job not found' });
+    res.json({ message: 'Job deleted' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 module.exports = {
-    getJobs,
-    createJob,
-    updateJob,
-    deleteJob,
+  getJobs,
+  createJob,
+  updateJob,
+  deleteJob,
 };

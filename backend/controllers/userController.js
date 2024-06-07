@@ -1,69 +1,76 @@
-const asyncHandler = require('express-async-handler');
+const Joi = require('joi');
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// Register new user
-const registerUser = asyncHandler(async (req, res) => {
-    const { username, email, password } = req.body;
+const userSchema = Joi.object({
+  name: Joi.string().min(3).required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required(),
+});
 
-    const userExists = await User.findOne({ email });
+const registerUser = async (req, res) => {
+  const { error } = userSchema.validate(req.body);
+  if (error) return res.status(400).json({ message: error.details[0].message });
 
-    if (userExists) {
-        res.status(400);
-        throw new Error('User already exists');
-    }
+  const { name, email, password } = req.body;
 
+  try {
+    let user = await User.findOne({ email });
+    if (user) return res.status(400).json({ message: 'User already exists' });
+
+    user = new User({ name, email, password });
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    user.password = await bcrypt.hash(password, salt);
+    await user.save();
 
-    const user = await User.create({
-        username,
-        email,
-        password: hashedPassword,
+    const payload = {
+      user: { id: user.id },
+    };
+
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
+      if (err) throw err;
+      res.json({ token });
     });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
-    if (user) {
-        res.status(201).json({
-            _id: user._id,
-            username: user.username,
-            email: user.email,
-            token: generateToken(user._id),
-        });
-    } else {
-        res.status(400);
-        throw new Error('Invalid user data');
-    }
-});
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
 
-// Login user
-const loginUser = asyncHandler(async (req, res) => {
-    const { email, password } = req.body;
+  try {
+    let user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ message: 'Invalid credentials' });
 
-    const user = await User.findOne({ email });
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
-    if (user && (await bcrypt.compare(password, user.password))) {
-        res.json({
-            _id: user._id,
-            username: user.username,
-            email: user.email,
-            token: generateToken(user._id),
-        });
-    } else {
-        res.status(401);
-        throw new Error('Invalid email or password');
-    }
-});
+    const payload = {
+      user: { id: user.id },
+    };
 
-// Generate JWT
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: '30d',
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
+      if (err) throw err;
+      res.json({ token });
     });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 module.exports = {
-    registerUser,
-    loginUser,
+  registerUser,
+  loginUser,
+  getUser,
 };
-
