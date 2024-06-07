@@ -11,7 +11,6 @@ connectDB();
 
 const app = express();
 app.use(express.json());
-app.use(require('cors')());
 
 app.use('/api/users', userRoutes);
 app.use('/api/jobs', jobRoutes);
