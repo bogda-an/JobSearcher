@@ -7,6 +7,7 @@ const {
   deleteJob,
 } = require('../controllers/jobController');
 const authMiddleware = require('../middleware/authMiddleware');
+router.get('/', getJobs);
 
 router.route('/')
   .get(getJobs)

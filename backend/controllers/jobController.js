@@ -16,13 +16,18 @@ const jobSchema = Joi.object({
 });
 
 const getJobs = async (req, res) => {
-  try {
-    const jobs = await Job.find();
-    res.json(jobs);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        const jobs = await Job.find().skip(skip).limit(limit);
+        res.json(jobs);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };
+
 
 const createJob = async (req, res) => {
   const { error } = jobSchema.validate(req.body);
