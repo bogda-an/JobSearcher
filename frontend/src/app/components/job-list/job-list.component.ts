@@ -13,8 +13,14 @@ export class JobListComponent implements OnInit {
   constructor(private jobService: JobService) {}
 
   ngOnInit(): void {
-    this.jobService.getJobs().subscribe(jobs => {
-      this.jobs = jobs;
-    });
+    this.jobService.getJobs().subscribe(
+      jobs => {
+        this.jobs = jobs;
+        console.log(this.jobs); // Add this line to debug
+      },
+      err => {
+        console.error(err); // Add this line to catch errors
+      }
+    );
   }
 }
