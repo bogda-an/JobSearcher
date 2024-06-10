@@ -1,0 +1,48 @@
+<!-- src/app/components/admin-dashboard/admin-dashboard.component.html -->
+<div class="admin-dashboard">
+    <h1>Admin Dashboard</h1>
+    <button (click)="toggleCreateJobForm()">Create Job</button>
+  
+    <div *ngIf="showCreateJobForm">
+      <h2>Create Job</h2>
+      <form (ngSubmit)="createJob()">
+        <label for="title">Title</label>
+        <input id="title" [(ngModel)]="newJob.title" name="title" required>
+  
+        <label for="company">Company</label>
+        <input id="company" [(ngModel)]="newJob.company" name="company" required>
+  
+        <label for="location">Location</label>
+        <input id="location" [(ngModel)]="newJob.location" name="location" required>
+  
+        <!-- Add other fields similarly -->
+  
+        <button type="submit">Create</button>
+      </form>
+    </div>
+  
+    <div *ngFor="let job of jobs">
+      <h3>{{ job.title }}</h3>
+      <button (click)="editJob(job)">Edit</button>
+      <button (click)="deleteJob(job._id!)">Delete</button> <!-- Use non-null assertion operator here -->
+    </div>
+  
+    <div *ngIf="selectedJob">
+      <h2>Edit Job</h2>
+      <form (ngSubmit)="updateJob()">
+        <label for="title">Title</label>
+        <input id="title" [(ngModel)]="selectedJob.title" name="title" required>
+  
+        <label for="company">Company</label>
+        <input id="company" [(ngModel)]="selectedJob.company" name="company" required>
+  
+        <label for="location">Location</label>
+        <input id="location" [(ngModel)]="selectedJob.location" name="location" required>
+  
+        <!-- Add other fields similarly -->
+  
+        <button type="submit">Update</button>
+      </form>
+    </div>
+  </div>
+  

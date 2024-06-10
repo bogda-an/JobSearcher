@@ -1,3 +1,4 @@
+// src/app/services/job.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -25,5 +26,17 @@ export class JobService {
 
   deleteJob(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  getJob(id: string): Observable<Job> {
+    return this.http.get<Job>(`${this.apiUrl}/${id}`);
+  }
+
+  applyForJob(applicationData: FormData): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/apply`, applicationData);
+  }
+
+  getSavedJobs(): Observable<Job[]> {
+    return this.http.get<Job[]>(`${this.apiUrl}/saved`);
   }
 }

@@ -1,0 +1,17 @@
+<!-- src/app/components/job-application/job-application.component.html -->
+<form [formGroup]="applicationForm" (ngSubmit)="submitApplication()">
+    <label for="name">Name</label>
+    <input id="name" formControlName="name" type="text">
+  
+    <label for="email">Email</label>
+    <input id="email" formControlName="email" type="email">
+  
+    <label for="resume">Resume</label>
+    <input id="resume" formControlName="resume" type="file">
+  
+    <label for="additionalDetails">Additional Details</label>
+    <textarea id="additionalDetails" formControlName="additionalDetails"></textarea>
+  
+    <button type="submit" [disabled]="applicationForm.invalid">Submit</button>
+  </form>
+  

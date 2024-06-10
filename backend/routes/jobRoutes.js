@@ -1,3 +1,4 @@
+// src/routes/jobRoutes.js
 const express = require('express');
 const router = express.Router();
 const {
@@ -5,12 +6,16 @@ const {
   createJob,
   updateJob,
   deleteJob,
+  applyForJob,
+  getSavedJobs,
 } = require('../controllers/jobController');
 const authMiddleware = require('../middleware/authMiddleware');
+
 router.get('/', getJobs);
+router.post('/apply', applyForJob);
+router.get('/saved', authMiddleware, getSavedJobs);
 
 router.route('/')
-  .get(getJobs)
   .post(authMiddleware, createJob);
 
 router.route('/:id')
