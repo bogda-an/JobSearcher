@@ -1,16 +1,15 @@
 <!-- src/app/components/job-detail/job-detail.component.html -->
 <div *ngIf="job">
-    <h1>{{ job.title }}</h1>
-    <p>{{ job.job_description }}</p>
-    <p><strong>Company:</strong> {{ job.company }}</p>
-    <p><strong>Location:</strong> {{ job.location }}</p>
-    <p><strong>Posted on:</strong> {{ job.date_posted | date }}</p>
-    <p><strong>Employment Type:</strong> {{ job.employment_type }}</p>
-    <p><strong>Requirements:</strong> {{ job.job_requirements }}</p>
-    <p><strong>Salary:</strong> {{ job.salary | currency }}</p>
-    <p><strong>Industry:</strong> {{ job.industry }}</p>
-    <p><strong>Experience Level:</strong> {{ job.experience_level }}</p>
-    <button (click)="applyForJob()">Apply</button>
-    <button (click)="saveJob()">Save</button>
-  </div>
-  
+  <h1>{{ job.title }}</h1>
+  <p>{{ job.job_description }}</p>
+  <p><strong>Company:</strong> {{ job.company }}</p>
+  <p><strong>Location:</strong> {{ job.location }}</p>
+  <p><strong>Posted on:</strong> {{ job.date_posted | date }}</p>
+  <p><strong>Employment Type:</strong> {{ job.employment_type }}</p>
+  <p><strong>Requirements:</strong> {{ job.job_requirements }}</p>
+  <p><strong>Salary:</strong> {{ job.salary | currency }}</p>
+  <p><strong>Industry:</strong> {{ job.industry }}</p>
+  <p><strong>Experience Level:</strong> {{ job.experience_level }}</p>
+  <button (click)="applyForJob()">Apply</button>
+  <button (click)="saveJob()">Save</button>
+</div>

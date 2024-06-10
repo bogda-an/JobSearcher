@@ -1,4 +1,3 @@
-// src/app/components/job-application/job-application.component.ts
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { JobService } from '../../services/job.service';
@@ -11,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class JobApplicationComponent implements OnInit {
   applicationForm: FormGroup;
-  jobId!: string;
+  jobId!: string; // Using definite assignment assertion
 
   constructor(
     private fb: FormBuilder,
