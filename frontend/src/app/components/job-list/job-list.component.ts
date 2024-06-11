@@ -5,7 +5,7 @@ import { Job } from '../../models/job';
 @Component({
   selector: 'app-job-list',
   templateUrl: './job-list.component.html',
-  styleUrls: ['./job-list.component.css']
+  styleUrls: ['./job-list.component.scss']
 })
 export class JobListComponent implements OnInit {
   jobs: Job[] = [];

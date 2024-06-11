@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { JobListComponent } from './job-list.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { CommonModule } from '@angular/common';
 
 describe('JobListComponent', () => {
   let component: JobListComponent;
@@ -8,10 +9,12 @@ describe('JobListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [JobListComponent]
-    })
-    .compileComponents();
+      declarations: [JobListComponent],
+      imports: [HttpClientTestingModule, CommonModule]
+    }).compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(JobListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

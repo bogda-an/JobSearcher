@@ -6,27 +6,35 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class JobService {
-  private baseUrl = 'http://localhost:3000/api/jobs'; // Adjust the base URL as necessary
+  private apiUrl = 'http://localhost:3000/api/jobs';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getJobs(): Observable<any[]> {
-    return this.http.get<any[]>(this.baseUrl);
+    return this.http.get<any[]>(`${this.apiUrl}`);
   }
 
-  createJob(job: any): Observable<any> {
-    return this.http.post<any>(this.baseUrl, job);
+  getJob(jobId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${jobId}`);
   }
 
-  updateJob(jobId: string, job: any): Observable<any> {
-    return this.http.put<any>(`${this.baseUrl}/${jobId}`, job);
+  createJob(jobData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}`, jobData);
+  }
+
+  updateJob(jobId: string, jobData: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${jobId}`, jobData);
   }
 
   deleteJob(jobId: string): Observable<any> {
-    return this.http.delete<any>(`${this.baseUrl}/${jobId}`);
+    return this.http.delete<any>(`${this.apiUrl}/${jobId}`);
   }
 
-  applyForJob(applicationData: FormData): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/apply`, applicationData);
+  applyForJob(jobId: string, applicationData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/${jobId}/apply`, applicationData);
+  }
+
+  getSavedJobs(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/saved`);
   }
 }

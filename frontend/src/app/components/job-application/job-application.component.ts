@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { JobService } from '../../services/job.service';
 import { ActivatedRoute } from '@angular/router';
+import { JobService } from '../../services/job.service';
 
 @Component({
   selector: 'app-job-application',
@@ -10,23 +10,22 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class JobApplicationComponent implements OnInit {
   applicationForm: FormGroup;
-  jobId!: string;
+  jobId: string = '';
 
   constructor(
     private fb: FormBuilder,
-    private jobService: JobService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private jobService: JobService
   ) {
     this.applicationForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      resume: [null, Validators.required],
-      additionalDetails: ['']
+      resume: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
-    this.jobId = this.route.snapshot.paramMap.get('id')!;
+    this.jobId = this.route.snapshot.paramMap.get('id') || '';
   }
 
   onFileChange(event: any): void {
@@ -40,15 +39,13 @@ export class JobApplicationComponent implements OnInit {
 
   submitApplication(): void {
     if (this.applicationForm.valid) {
-      const formData = new FormData();
-      formData.append('name', this.applicationForm.get('name')!.value);
-      formData.append('email', this.applicationForm.get('email')!.value);
-      formData.append('resume', this.applicationForm.get('resume')!.value);
-      formData.append('additionalDetails', this.applicationForm.get('additionalDetails')!.value);
-      formData.append('jobId', this.jobId);
+      const applicationData = new FormData();
+      applicationData.append('name', this.applicationForm.get('name')?.value);
+      applicationData.append('email', this.applicationForm.get('email')?.value);
+      applicationData.append('resume', this.applicationForm.get('resume')?.value);
 
-      this.jobService.applyForJob(formData).subscribe((response: any) => {
-        console.log('Application submitted', response);
+      this.jobService.applyForJob(this.jobId, applicationData).subscribe((response: any) => {
+        // Handle response
       });
     }
   }

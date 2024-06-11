@@ -8,19 +8,19 @@ import { JobService } from '../../services/job.service';
 })
 export class AdminDashboardComponent implements OnInit {
   jobs: any[] = [];
+  selectedJob: any = null;
   newJob: any = {};
-  selectedJob: any = {};
-  showCreateJobForm = false;
+  showCreateJobForm: boolean = false;
 
-  constructor(private jobService: JobService) {}
+  constructor(private jobService: JobService) { }
 
   ngOnInit(): void {
     this.loadJobs();
   }
 
   loadJobs(): void {
-    this.jobService.getJobs().subscribe(jobs => {
-      this.jobs = jobs;
+    this.jobService.getJobs().subscribe((data: any[]) => {
+      this.jobs = data;
     });
   }
 
@@ -31,7 +31,8 @@ export class AdminDashboardComponent implements OnInit {
   createJob(): void {
     this.jobService.createJob(this.newJob).subscribe(() => {
       this.loadJobs();
-      this.newJob = {}; // Reset form
+      this.newJob = {};
+      this.showCreateJobForm = false;
     });
   }
 
@@ -40,10 +41,12 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   updateJob(): void {
-    this.jobService.updateJob(this.selectedJob._id, this.selectedJob).subscribe(() => {
-      this.loadJobs();
-      this.selectedJob = {}; // Reset form
-    });
+    if (this.selectedJob && this.selectedJob._id) {
+      this.jobService.updateJob(this.selectedJob._id, this.selectedJob).subscribe(() => {
+        this.loadJobs();
+        this.selectedJob = null;
+      });
+    }
   }
 
   deleteJob(jobId: string): void {

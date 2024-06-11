@@ -10,7 +10,7 @@ import { Job } from '../../models/job';
   styleUrls: ['./job-detail.component.scss']
 })
 export class JobDetailComponent implements OnInit {
-  job: Job | undefined;
+  job: Job = {} as Job;
 
   constructor(
     private route: ActivatedRoute,
