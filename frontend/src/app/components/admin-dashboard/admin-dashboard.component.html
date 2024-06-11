@@ -23,7 +23,7 @@
   <div *ngFor="let job of jobs">
     <h3>{{ job.title }}</h3>
     <button (click)="editJob(job)">Edit</button>
-    <button (click)="deleteJob(job._id!)">Delete</button> <!-- Use non-null assertion operator here -->
+    <button (click)="deleteJob(job._id!)">Delete</button> <!-- Ensure _id is not undefined -->
   </div>
 
   <div *ngIf="selectedJob">

@@ -1,58 +1,54 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { JobService } from '../../services/job.service';
-import { Job } from '../../models/job';
 
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.scss']
 })
-export class AdminDashboardComponent {
-  jobs: Job[] = [];
-  newJob: Job = {} as Job;
-  selectedJob: Job | null = null;
-  showCreateJobForm: boolean = false;
+export class AdminDashboardComponent implements OnInit {
+  jobs: any[] = [];
+  newJob: any = {};
+  selectedJob: any = {};
+  showCreateJobForm = false;
 
-  constructor(private jobService: JobService) {
+  constructor(private jobService: JobService) {}
+
+  ngOnInit(): void {
     this.loadJobs();
   }
 
   loadJobs(): void {
-    this.jobService.getJobs().subscribe((data) => {
-      this.jobs = data;
+    this.jobService.getJobs().subscribe(jobs => {
+      this.jobs = jobs;
     });
   }
 
   toggleCreateJobForm(): void {
     this.showCreateJobForm = !this.showCreateJobForm;
-    this.newJob = {} as Job; // Reset the form
   }
 
   createJob(): void {
     this.jobService.createJob(this.newJob).subscribe(() => {
-      this.loadJobs(); // Reload the job list
-      this.toggleCreateJobForm(); // Hide the form
+      this.loadJobs();
+      this.newJob = {}; // Reset form
     });
   }
 
-  editJob(job: Job): void {
-    this.selectedJob = { ...job }; // Make a copy of the job to edit
+  editJob(job: any): void {
+    this.selectedJob = { ...job };
   }
 
   updateJob(): void {
-    if (this.selectedJob) {
-      this.jobService.updateJob(this.selectedJob._id!, this.selectedJob).subscribe(() => {
-        this.loadJobs(); // Reload the job list
-        this.selectedJob = null; // Deselect the job
-      });
-    }
+    this.jobService.updateJob(this.selectedJob._id, this.selectedJob).subscribe(() => {
+      this.loadJobs();
+      this.selectedJob = {}; // Reset form
+    });
   }
 
-  deleteJob(id: string): void {
-    if (id) {
-      this.jobService.deleteJob(id).subscribe(() => {
-        this.loadJobs(); // Reload the job list
-      });
-    }
+  deleteJob(jobId: string): void {
+    this.jobService.deleteJob(jobId).subscribe(() => {
+      this.loadJobs();
+    });
   }
 }

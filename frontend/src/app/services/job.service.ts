@@ -1,42 +1,32 @@
-// src/app/services/job.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Job } from '../models/job';
 
 @Injectable({
   providedIn: 'root'
 })
 export class JobService {
-  private apiUrl = 'http://localhost:5000/api/jobs';
+  private baseUrl = 'http://localhost:3000/api/jobs'; // Adjust the base URL as necessary
 
   constructor(private http: HttpClient) {}
 
-  getJobs(): Observable<Job[]> {
-    return this.http.get<Job[]>(this.apiUrl);
+  getJobs(): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl);
   }
 
-  createJob(job: Job): Observable<Job> {
-    return this.http.post<Job>(this.apiUrl, job);
+  createJob(job: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl, job);
   }
 
-  updateJob(id: string, job: Job): Observable<Job> {
-    return this.http.put<Job>(`${this.apiUrl}/${id}`, job);
+  updateJob(jobId: string, job: any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/${jobId}`, job);
   }
 
-  deleteJob(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
-  }
-
-  getJob(id: string): Observable<Job> {
-    return this.http.get<Job>(`${this.apiUrl}/${id}`);
+  deleteJob(jobId: string): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/${jobId}`);
   }
 
   applyForJob(applicationData: FormData): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/apply`, applicationData);
-  }
-
-  getSavedJobs(): Observable<Job[]> {
-    return this.http.get<Job[]>(`${this.apiUrl}/saved`);
+    return this.http.post<any>(`${this.baseUrl}/apply`, applicationData);
   }
 }

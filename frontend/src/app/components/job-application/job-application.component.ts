@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class JobApplicationComponent implements OnInit {
   applicationForm: FormGroup;
-  jobId!: string; // Using definite assignment assertion
+  jobId!: string;
 
   constructor(
     private fb: FormBuilder,
@@ -47,8 +47,7 @@ export class JobApplicationComponent implements OnInit {
       formData.append('additionalDetails', this.applicationForm.get('additionalDetails')!.value);
       formData.append('jobId', this.jobId);
 
-      // Logic to submit the application
-      this.jobService.applyForJob(formData).subscribe(response => {
+      this.jobService.applyForJob(formData).subscribe((response: any) => {
         console.log('Application submitted', response);
       });
     }
