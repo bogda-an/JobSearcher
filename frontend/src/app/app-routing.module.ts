@@ -1,4 +1,3 @@
-// src/app/app-routing.module.ts
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
@@ -10,7 +9,7 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'jobs', component: JobListComponent },
   { path: 'jobs/:id', component: JobDetailComponent },
