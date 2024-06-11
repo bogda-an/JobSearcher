@@ -4,7 +4,7 @@ import { JobDetailComponent } from './job-detail/job-detail.component';
 import { JobFormComponent } from './job-form/job-form.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { AuthGuard } from './auth.guard'; // Ensure this path is correct
+import { AuthGuard } from './auth.guard';
 
 export const routes: Routes = [
   { path: '', component: JobListComponent },
