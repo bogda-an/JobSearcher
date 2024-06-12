@@ -8,6 +8,7 @@ const userRoutes = require('./routes/userRoutes');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('./models/user');
+const cors = require('cors');
 
 const app = express();
 
@@ -16,6 +17,7 @@ connectDB();
 
 // Middleware
 app.use(express.json());
+app.use(cors());
 
 // Routes
 app.use('/api/jobs', jobRoutes);
