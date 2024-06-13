@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class JobPostingService {
-  private apiUrl = 'http://localhost:5000/api/jobs';  // Adjust based on your backend route
+  private apiUrl = 'http://localhost:5000/api/jobs';  
 
   constructor(private http: HttpClient) { }
 
