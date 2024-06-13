@@ -20,8 +20,8 @@ app.use(express.json());
 app.use(cors());
 
 // Routes
-app.use('/api/jobs', jobRoutes);
-app.use('/api/users', userRoutes);
+app.use('/api/jobs', require('./routes/jobRoutes'));
+app.use('/api/users', require('./routes/userRoutes'));
 
 // Register route
 app.post('/register', async (req, res) => {

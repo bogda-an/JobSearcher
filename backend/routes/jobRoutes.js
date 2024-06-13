@@ -28,8 +28,8 @@ router.get('/saved', authMiddleware, getSavedJobs);
 router.route('/')
   .post(authMiddleware, createJob);
 
-router.route('/:id')
-  .put(authMiddleware, updateJob)
-  .delete(authMiddleware, deleteJob);
+  router.post('/', authMiddleware, createJob);
+  router.put('/:id', authMiddleware, updateJob);
+  router.delete('/:id', authMiddleware, deleteJob);
 
 module.exports = router;
