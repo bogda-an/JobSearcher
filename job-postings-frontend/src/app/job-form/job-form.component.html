@@ -1,1 +1,19 @@
-<p>job-form works!</p>
+<div class="job-form-container">
+    <h2>Create Job Posting</h2>
+    <form (ngSubmit)="createJob()">
+      <label for="title">Job Title:</label>
+      <input type="text" id="title" [(ngModel)]="job.title" name="title" required>
+      
+      <label for="description">Job Description:</label>
+      <textarea id="description" [(ngModel)]="job.description" name="description" required></textarea>
+      
+      <label for="company">Company:</label>
+      <input type="text" id="company" [(ngModel)]="job.company" name="company" required>
+      
+      <label for="location">Location:</label>
+      <input type="text" id="location" [(ngModel)]="job.location" name="location" required>
+      
+      <button type="submit">Create Job</button>
+    </form>
+  </div>
+  

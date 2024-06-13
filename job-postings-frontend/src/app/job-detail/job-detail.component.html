@@ -1,1 +1,9 @@
-<p>job-detail works!</p>
+<div *ngIf="job">
+    <h2>{{ job.title }}</h2>
+    <p><strong>Company:</strong> {{ job.company }}</p>
+    <p><strong>Location:</strong> {{ job.location }}</p>
+    <p><strong>Description:</strong></p>
+    <p>{{ job.description }}</p>
+    <button (click)="delete()">Delete</button>
+  </div>
+  

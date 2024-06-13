@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class JobPostingService {
-  private apiUrl = 'http://localhost:5000/api/jobs';  
+  private apiUrl = 'http://localhost:5000/api/jobs';
 
   constructor(private http: HttpClient) { }
 
@@ -18,12 +18,8 @@ export class JobPostingService {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
 
-  createJobPosting(job: any): Observable<any> {
+  createJob(job: any): Observable<any> {
     return this.http.post(this.apiUrl, job);
-  }
-
-  updateJobPosting(id: string, job: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, job);
   }
 
   deleteJobPosting(id: string): Observable<any> {
