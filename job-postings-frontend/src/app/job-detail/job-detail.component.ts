@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JobPostingService } from '../job-posting.service';
+import { Job } from '../job.model'; // Import the Job model
 
 @Component({
   selector: 'app-job-detail',
@@ -8,29 +9,30 @@ import { JobPostingService } from '../job-posting.service';
   styleUrls: ['./job-detail.component.css']
 })
 export class JobDetailComponent implements OnInit {
-  job: any = {};
-  id: string | null = null;
+  job: Job | undefined;
+  id: string;
 
   constructor(
     private jobPostingService: JobPostingService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
-
-  ngOnInit(): void {
-    this.id = this.route.snapshot.paramMap.get('id');
-    if (this.id) {
-      this.jobPostingService.getJobPosting(this.id).subscribe((data: any) => {
-        this.job = data;
-      });
-    }
+  ) {
+    this.id = this.route.snapshot.paramMap.get('id') as string;
   }
 
-  delete(): void {
-    if (this.id) {
-      this.jobPostingService.deleteJobPosting(this.id).subscribe(() => {
-        this.router.navigate(['/']);
-      });
-    }
+  ngOnInit(): void {
+    this.getJobDetail();
+  }
+
+  getJobDetail(): void {
+    this.jobPostingService.getJobPosting(this.id).subscribe((data: Job) => {
+      this.job = data;
+    });
+  }
+
+  deleteJob(): void {
+    this.jobPostingService.deleteJobPosting(this.id).subscribe(() => {
+      this.router.navigate(['/jobs']);
+    });
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { JobPostingService } from '../job-posting.service';
+import { Job } from '../job.model'; // Import the Job model
 
 @Component({
   selector: 'app-job-list',
@@ -10,12 +11,12 @@ import { JobPostingService } from '../job-posting.service';
   styleUrls: ['./job-list.component.css']
 })
 export class JobListComponent implements OnInit {
-  jobPostings: any[] = [];
+  jobPostings: Job[] = []; // Use Job[] instead of any[]
 
   constructor(private jobPostingService: JobPostingService) {}
 
   ngOnInit(): void {
-    this.jobPostingService.getJobPostings().subscribe(data => {
+    this.jobPostingService.getJobs().subscribe((data: Job[]) => {
       this.jobPostings = data;
     });
   }
